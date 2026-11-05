@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Desain UI/UX aplikasi web manajemen Cafe Setara">
+<title>Cafe Setara - Desain UI/UX</title>
+<style>
+:root{--brown:#5a3a22;--brown2:#8b5e3c;--cream:#fbf6ef;--paper:#ffffff;--matcha:#7a9a4b;--red:#c0392b;--ink:#2b2118;--muted:#7a6b5d;--line:#eadfd1;--gold:#e0a84f;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--cream:#1f1812;--paper:#2a2119;--ink:#f3e9dc;--muted:#b9a897;--line:#3d3026;--brown:#e8c9a4;color-scheme:dark}}
+:root[data-theme="dark"]{--cream:#1f1812;--paper:#2a2119;--ink:#f3e9dc;--muted:#b9a897;--line:#3d3026;--brown:#e8c9a4;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--cream);color:var(--ink);padding-top:env(safe-area-inset-top,0px)}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--brown);color:#fff;padding:10px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+header.top .brand{font-weight:800;letter-spacing:.3px;margin-right:auto}
+nav.tabs{display:flex;gap:6px;overflow-x:auto;width:100%;padding-bottom:2px}
+nav.tabs button{flex:0 0 auto;border:0;background:rgba(255,255,255,.14);color:#fff;padding:7px 12px;border-radius:999px;cursor:pointer;font-size:13px}
+nav.tabs button.on{background:#fff;color:var(--brown);font-weight:700}
+main{max-width:1100px;margin:0 auto;padding:20px 16px 60px}
+section.screen{display:none}
+section.screen.on{display:block}
+h1{font-size:26px;margin:0 0 6px}
+h2{font-size:18px;margin:0 0 10px}
+p.lead{color:var(--muted);margin:0 0 18px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.btn{display:inline-block;border:0;border-radius:10px;padding:10px 16px;background:var(--brown);color:#fff;font-weight:600;cursor:pointer;font-size:14px;text-decoration:none}
+.btn.ghost{background:transparent;color:var(--brown);border:1px solid var(--brown)}
+.btn.matcha{background:var(--matcha)}
+.hero{background:linear-gradient(135deg,#5a3a22,#8b5e3c 60%,#7a9a4b);color:#fff;border-radius:18px;padding:40px 24px;text-align:center}
+.hero h1{font-size:32px}
+.hero p{opacity:.92;max-width:620px;margin:0 auto 18px}
+.tag{display:inline-block;font-size:12px;padding:3px 9px;border-radius:999px;background:var(--line);color:var(--ink)}
+.tag.ok{background:#dcebc8;color:#3b5a1b}
+.tag.warn{background:#fbe0b8;color:#7a4a00}
+.tag.bad{background:#f6d2cd;color:#8a2417}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.4px}
+.kpi{font-size:24px;font-weight:800}
+.kpi-l{color:var(--muted);font-size:13px}
+.split{display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:800px){.split{grid-template-columns:1.6fr 1fr}}
+form .f{margin-bottom:12px}
+label{display:block;font-size:13px;color:var(--muted);margin-bottom:4px}
+input,select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink);font-size:14px}
+.auth{max-width:380px;margin:0 auto}
+.or{text-align:center;color:var(--muted);font-size:12px;margin:12px 0}
+.gbtn{width:100%;background:#fff;color:#333;border:1px solid #ccc}
+/* POS tablet */
+.pos{display:grid;gap:14px;grid-template-columns:1fr}
+@media(min-width:760px){.pos{grid-template-columns:1.5fr 1fr}}
+.cats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.cats span{padding:8px 14px;border-radius:999px;background:var(--paper);border:1px solid var(--line);font-size:13px;cursor:pointer}
+.cats span.on{background:var(--brown);color:#fff;border-color:var(--brown)}
+.menu-grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
+.item{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:12px;cursor:pointer;text-align:left;color:var(--ink);font:inherit}
+.item:active{transform:scale(.98)}
+.item .ico{height:64px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:30px;margin-bottom:8px}
+.item b{display:block;font-size:14px}
+.item small{color:var(--muted)}
+.cart{position:sticky;top:110px;align-self:start}
+.line{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px dashed var(--line);font-size:14px;gap:8px}
+.qty{display:inline-flex;align-items:center;gap:6px}
+.qty button{width:26px;height:26px;border-radius:50%;border:1px solid var(--line);background:var(--cream);color:var(--ink);cursor:pointer}
+.total{display:flex;justify-content:space-between;font-size:18px;font-weight:800;margin:12px 0}
+.pay{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.bar{height:10px;border-radius:99px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--matcha)}
+pre.schema{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px;overflow-x:auto;font-size:12.5px;line-height:1.5}
+.erd{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+.tbl{background:var(--paper);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.tbl h3{margin:0;padding:9px 12px;background:var(--brown);color:#fff;font-size:14px;font-family:ui-monospace,Menlo,Consolas,monospace}
+.tbl ul{list-style:none;margin:0;padding:8px 12px}
+.tbl li{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;padding:3px 0;display:flex;justify-content:space-between;gap:8px}
+.tbl li em{font-style:normal;color:var(--muted)}
+.pk{color:var(--gold);font-weight:700}
+.fk{color:var(--matcha);font-weight:700}
+.swatch{display:flex;gap:10px;flex-wrap:wrap}
+.swatch div{width:110px;border-radius:10px;overflow:hidden;border:1px solid var(--line);font-size:12px}
+.swatch div b{display:block;padding:6px;color:#fff}
+.swatch div span{display:block;padding:6px;background:var(--paper)}
+footer{color:var(--muted);font-size:12px;text-align:center;margin-top:30px}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="brand">☕ Cafe Setara</div>
+  <nav class="tabs" id="tabs">
+    <button data-s="landing" class="on">Landing</button>
+    <button data-s="auth">Login / Register</button>
+    <button data-s="dash">Dashboard</button>
+    <button data-s="pos">POS (Kasir)</button>
+    <button data-s="menu">Menu &amp; HPP</button>
+    <button data-s="stok">Stok</button>
+    <button data-s="laporan">Laporan</button>
+    <button data-s="db">Database</button>
+    <button data-s="sistem">Panduan Desain</button>
+  </nav>
+</header>
+
+<main>
+
+<!-- LANDING -->
+<section class="screen on" id="s-landing">
+  <div class="hero">
+    <p style="letter-spacing:2px;font-size:12px;opacity:.8;margin:0 0 8px">KOPI • MATCHA • COKELAT</p>
+    <h1>Kelola Cafe Setara Lebih Rapi</h1>
+    <p>Kasir, stok bahan, resep, HPP, dan laporan keuangan dalam satu aplikasi web. Tidak perlu input data dua kali.</p>
+    <a class="btn" href="#" onclick="go('auth');return false">Masuk ke Aplikasi</a>
+    <a class="btn ghost" style="color:#fff;border-color:#fff;margin-left:6px" href="#" onclick="go('pos');return false">Lihat Demo Kasir</a>
+  </div>
+  <div class="grid" style="margin-top:22px">
+    <div class="card"><h2>🧾 Kasir Tablet</h2><p class="lead" style="margin:0">Pilih menu, bayar, stok otomatis berkurang.</p></div>
+    <div class="card"><h2>📦 Stok Bahan</h2><p class="lead" style="margin:0">Peringatan stok minimum sebelum bahan habis.</p></div>
+    <div class="card"><h2>🧮 HPP &amp; Margin</h2><p class="lead" style="margin:0">Harga pokok dihitung otomatis dari resep.</p></div>
+    <div class="card"><h2>📊 Laporan PDF</h2><p class="lead" style="margin:0">Stok, pendapatan, dan cash flow siap diunduh.</p></div>
+  </div>
+  <div class="card" style="margin-top:18px">
+    <h2>Menu Unggulan</h2>
+    <div class="grid">
+      <div class="card"><div style="font-size:30px">🥛</div><b>Kopi Susu</b><p class="lead" style="margin:4px 0 0">Espresso dengan susu segar.</p></div>
+      <div class="card"><div style="font-size:30px">🫖</div><b>Matcha</b><p class="lead" style="margin:4px 0 0">Matcha Jepang dengan susu.</p></div>
+      <div class="card"><div style="font-size:30px">🍫</div><b>Cokelat</b><p class="lead" style="margin:4px 0 0">Cokelat panas creamy.</p></div>
+    </div>
+  </div>
+  <footer>Landing page • SEO: judul, meta description, dan heading jelas • Tombol utama selalu terlihat</footer>
+</section>
+
+<!-- AUTH -->
+<section class="screen" id="s-auth">
+  <div class="auth">
+    <div class="card">
+      <h1 style="font-size:22px">Masuk</h1>
+      <p class="lead">Untuk pemilik, accounting, dan kasir.</p>
+      <form onsubmit="event.preventDefault();go('dash')">
+        <div class="f"><label>Email</label><input type="email" placeholder="nama@cafesetara.id"></div>
+        <div class="f"><label>Password</label><input type="password" placeholder="••••••••"></div>
+        <button class="btn" style="width:100%">Masuk</button>
+      </form>
+      <div class="or">atau</div>
+      <button class="btn gbtn" onclick="go('dash')">G&nbsp; Masuk dengan Google</button>
+      <p class="lead" style="margin:14px 0 0;text-align:center">Belum punya akun? <a href="#" onclick="go('register');return false" style="color:var(--brown)">Daftar</a></p>
+    </div>
+  </div>
+</section>
+
+<section class="screen" id="s-register">
+  <div class="auth">
+    <div class="card">
+      <h1 style="font-size:22px">Daftar</h1>
+      <p class="lead">Akun baru perlu persetujuan pemilik.</p>
+      <form onsubmit="event.preventDefault();go('dash')">
+        <div class="f"><label>Nama lengkap</label><input placeholder="Nama"></div>
+        <div class="f"><label>Email</label><input type="email" placeholder="nama@cafesetara.id"></div>
+        <div class="f"><label>Password (min. 8 karakter)</label><input type="password"></div>
+        <div class="f"><label>Peran</label><select><option>Kasir</option><option>Accounting</option><option>Pemilik</option></select></div>
+        <button class="btn" style="width:100%">Daftar</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- DASHBOARD -->
+<section class="screen" id="s-dash">
+  <h1>Halo, Pemilik 👋</h1>
+  <p class="lead">Ringkasan hari ini, 5 November 2026.</p>
+  <div class="grid">
+    <div class="card"><div class="kpi-l">Pendapatan hari ini</div><div class="kpi">Rp 1.486.000</div><span class="tag ok">+12% dari kemarin</span></div>
+    <div class="card"><div class="kpi-l">Transaksi</div><div class="kpi">74</div><span class="tag">Rata-rata Rp 20.080</span></div>
+    <div class="card"><div class="kpi-l">Menu terlaris</div><div class="kpi">Kopi Susu</div><span class="tag">38 porsi</span></div>
+    <div class="card"><div class="kpi-l">Stok hampir habis</div><div class="kpi">3 bahan</div><span class="tag warn">Perlu dibeli</span></div>
+  </div>
+  <div class="split" style="margin-top:16px">
+    <div class="card">
+      <h2>Penjualan 7 hari terakhir</h2>
+      <div style="display:flex;align-items:flex-end;gap:10px;height:160px;padding-top:10px">
+        <div style="flex:1;background:var(--line);height:45%;border-radius:8px 8px 0 0"></div>
+        <div style="flex:1;background:var(--line);height:60%;border-radius:8px 8px 0 0"></div>
+        <div style="flex:1;background:var(--line);height:52%;border-radius:8px 8px 0 0"></div>
+        <div style="flex:1;background:var(--line);height:70%;border-radius:8px 8px 0 0"></div>
+        <div style="flex:1;background:var(--line);height:64%;border-radius:8px 8px 0 0"></div>
+        <div style="flex:1;background:var(--line);height:82%;border-radius:8px 8px 0 0"></div>
+        <div style="flex:1;background:var(--matcha);height:100%;border-radius:8px 8px 0 0"></div>
+      </div>
+      <p class="lead" style="margin:8px 0 0;font-size:12px">Batang: total pendapatan harian (contoh data).</p>
+    </div>
+    <div class="card">
+      <h2>Peringatan stok</h2>
+      <div class="line"><span>Susu full cream</span><span class="tag bad">2 L (min 5 L)</span></div>
+      <div class="line"><span>Biji kopi</span><span class="tag warn">600 g (min 1 kg)</span></div>
+      <div class="line"><span>Matcha bubuk</span><span class="tag warn">150 g (min 200 g)</span></div>
+      <div class="line" style="border:0"><span>Cokelat bubuk</span><span class="tag ok">OK</span></div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <h2>Transaksi terakhir</h2>
+    <table><thead><tr><th>Kode</th><th>Waktu</th><th>Kasir</th><th>Total</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>TRX-0474</td><td>14:32</td><td>Kasir 1</td><td>Rp 44.000</td><td><span class="tag ok">Lunas</span></td></tr>
+      <tr><td>TRX-0473</td><td>14:18</td><td>Kasir 1</td><td>Rp 22.000</td><td><span class="tag ok">Lunas</span></td></tr>
+      <tr><td>TRX-0472</td><td>13:55</td><td>Kasir 1</td><td>Rp 31.000</td><td><span class="tag ok">Lunas</span></td></tr>
+    </tbody></table>
+  </div>
+</section>
+
+<!-- POS -->
+<section class="screen" id="s-pos">
+  <h1>Kasir (POS)</h1>
+  <p class="lead">Layout tablet landscape. Sentuh menu untuk menambah ke keranjang.</p>
+  <div class="pos">
+    <div>
+      <div class="cats" id="cats">
+        <span class="on" data-c="all">Semua</span>
+        <span data-c="kopi">Kopi</span>
+        <span data-c="nonkopi">Non-kopi</span>
+      </div>
+      <div class="menu-grid" id="menuGrid"></div>
+    </div>
+    <div class="card cart">
+      <h2>Pesanan</h2>
+      <div id="cartLines"><p class="lead">Belum ada item.</p></div>
+      <div class="total"><span>Total</span><span id="cartTotal">Rp 0</span></div>
+      <div class="pay">
+        <button class="btn ghost" onclick="clearCart()">Batal</button>
+        <button class="btn matcha" onclick="pay()">Bayar</button>
+      </div>
+      <p class="lead" style="font-size:12px;margin:10px 0 0">Saat bayar: stok bahan berkurang otomatis sesuai resep, lalu transaksi tercatat di laporan.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MENU & HPP -->
+<section class="screen" id="s-menu">
+  <h1>Menu, Resep &amp; HPP</h1>
+  <p class="lead">HPP = total (takaran × harga beli bahan). Margin = (harga jual − HPP) ÷ harga jual.</p>
+  <div class="card" style="overflow-x:auto">
+    <table>
+      <thead><tr><th>Menu</th><th>Kategori</th><th>Harga jual</th><th>HPP</th><th>Margin</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td><b>Kopi Susu</b></td><td>Kopi</td><td>Rp 22.000</td><td>Rp 11.450</td><td><span class="tag ok">48%</span></td><td><span class="tag ok">Aktif</span></td></tr>
+        <tr><td><b>Kopi Hitam</b></td><td>Kopi</td><td>Rp 18.000</td><td>Rp 7.200</td><td><span class="tag ok">60%</span></td><td><span class="tag ok">Aktif</span></td></tr>
+        <tr><td><b>Matcha Latte</b></td><td>Non-kopi</td><td>Rp 26.000</td><td>Rp 14.900</td><td><span class="tag warn">43%</span></td><td><span class="tag ok">Aktif</span></td></tr>
+        <tr><td><b>Cokelat</b></td><td>Non-kopi</td><td>Rp 22.000</td><td>Rp 9.800</td><td><span class="tag ok">55%</span></td><td><span class="tag ok">Aktif</span></td></tr>
+        <tr><td><b>Milky</b></td><td>Non-kopi</td><td>Rp 20.000</td><td>Rp 8.600</td><td><span class="tag ok">57%</span></td><td><span class="tag ok">Aktif</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="split" style="margin-top:16px">
+    <div class="card">
+      <h2>Edit resep: Kopi Susu</h2>
+      <table>
+        <thead><tr><th>Bahan</th><th>Takaran</th><th>Harga/satuan</th><th>Subtotal</th></tr></thead>
+        <tbody>
+          <tr><td>Biji kopi</td><td>18 g</td><td>Rp 350</td><td>Rp 6.300</td></tr>
+          <tr><td>Susu full cream</td><td>150 ml</td><td>Rp 25</td><td>Rp 3.750</td></tr>
+          <tr><td>Gula aren</td><td>10 g</td><td>Rp 20</td><td>Rp 200</td></tr>
+          <tr><td>Gelas + tutup</td><td>1 pcs</td><td>Rp 1.200</td><td>Rp 1.200</td></tr>
+        </tbody>
+      </table>
+      <p class="lead" style="margin:10px 0 0">Total HPP: <b>Rp 11.450</b> • Margin <b>48%</b>. Harga bahan contoh, bukan data final.</p>
+    </div>
+    <div class="card">
+      <h2>Tambah menu baru</h2>
+      <form onsubmit="event.preventDefault()">
+        <div class="f"><label>Nama menu</label><input placeholder="Contoh: Matcha Cokelat"></div>
+        <div class="f"><label>Kategori</label><select><option>Kopi</option><option>Non-kopi</option></select></div>
+        <div class="f"><label>Harga jual</label><input type="number" placeholder="25000"></div>
+        <button class="btn">Simpan menu</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- STOK -->
+<section class="screen" id="s-stok">
+  <h1>Bahan &amp; Stok</h1>
+  <p class="lead">Stok berkurang otomatis saat transaksi. Stok masuk dicatat saat pembelian.</p>
+  <div class="card" style="overflow-x:auto">
+    <table>
+      <thead><tr><th>Bahan</th><th>Satuan</th><th>Stok</th><th>Stok minimum</th><th>Level</th><th>Aksi</th></tr></thead>
+      <tbody>
+        <tr><td>Biji kopi</td><td>g</td><td>600</td><td>1.000</td><td><div class="bar" style="width:120px"><i style="width:60%"></i></div></td><td><button class="btn ghost">Stok masuk</button></td></tr>
+        <tr><td>Susu full cream</td><td>ml</td><td>2.000</td><td>5.000</td><td><div class="bar" style="width:120px"><i style="width:40%;background:var(--red)"></i></div></td><td><button class="btn ghost">Stok masuk</button></td></tr>
+        <tr><td>Matcha bubuk</td><td>g</td><td>150</td><td>200</td><td><div class="bar" style="width:120px"><i style="width:75%;background:var(--gold)"></i></div></td><td><button class="btn ghost">Stok masuk</button></td></tr>
+        <tr><td>Cokelat bubuk</td><td>g</td><td>3.200</td><td>1.000</td><td><div class="bar" style="width:120px"><i style="width:90%"></i></div></td><td><button class="btn ghost">Stok masuk</button></td></tr>
+        <tr><td>Gula aren</td><td>g</td><td>2.500</td><td>1.000</td><td><div class="bar" style="width:120px"><i style="width:85%"></i></div></td><td><button class="btn ghost">Stok masuk</button></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- LAPORAN -->
+<section class="screen" id="s-laporan">
+  <h1>Laporan</h1>
+  <p class="lead">Pilih jenis laporan dan periode, lalu ekspor ke PDF.</p>
+  <div class="card" style="margin-bottom:16px">
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr));align-items:end">
+      <div class="f"><label>Jenis</label><select><option>Stok bahan</option><option>Pendapatan</option><option>Cash flow</option></select></div>
+      <div class="f"><label>Dari</label><input type="date" value="2026-11-01"></div>
+      <div class="f"><label>Sampai</label><input type="date" value="2026-11-05"></div>
+      <div class="f"><button class="btn" style="width:100%">Tampilkan</button></div>
+      <div class="f"><button class="btn matcha" style="width:100%">Unduh PDF</button></div>
+    </div>
+  </div>
+  <div class="split">
+    <div class="card">
+      <h2>Ringkasan pendapatan • 1–5 Nov 2026</h2>
+      <table>
+        <thead><tr><th>Tanggal</th><th>Transaksi</th><th>Pendapatan</th><th>HPP</th><th>Laba kotor</th></tr></thead>
+        <tbody>
+          <tr><td>01 Nov</td><td>62</td><td>Rp 1.240.000</td><td>Rp 510.000</td><td>Rp 730.000</td></tr>
+          <tr><td>02 Nov</td><td>58</td><td>Rp 1.165.000</td><td>Rp 480.000</td><td>Rp 685.000</td></tr>
+          <tr><td>03 Nov</td><td>71</td><td>Rp 1.398.000</td><td>Rp 575.000</td><td>Rp 823.000</td></tr>
+          <tr><td>04 Nov</td><td>66</td><td>Rp 1.322.000</td><td>Rp 541.000</td><td>Rp 781.000</td></tr>
+          <tr><td>05 Nov</td><td>74</td><td>Rp 1.486.000</td><td>Rp 603.000</td><td>Rp 883.000</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <h2>Cash flow</h2>
+      <div class="line"><span>Kas masuk</span><b>Rp 6.612.000</b></div>
+      <div class="line"><span>Pembelian bahan</span><span>− Rp 2.140.000</span></div>
+      <div class="line"><span>Biaya operasional</span><span>− Rp 950.000</span></div>
+      <div class="line" style="border:0"><b>Saldo</b><b>Rp 3.522.000</b></div>
+    </div>
+  </div>
+</section>
+
+<!-- DATABASE -->
+<section class="screen" id="s-db">
+  <h1>Database (MySQL)</h1>
+  <p class="lead">Struktur tabel dan relasi. <span class="pk">PK</span> = primary key, <span class="fk">FK</span> = foreign key.</p>
+
+  <div class="erd">
+    <div class="tbl"><h3>users</h3><ul>
+      <li><span><span class="pk">id</span></span><em>BIGINT</em></li>
+      <li><span>nama</span><em>VARCHAR(100)</em></li>
+      <li><span>email</span><em>VARCHAR(150) UQ</em></li>
+      <li><span>password</span><em>VARCHAR(255)</em></li>
+      <li><span>google_id</span><em>VARCHAR(100) NULL</em></li>
+      <li><span>role</span><em>ENUM(owner,accounting,kasir)</em></li>
+    </ul></div>
+
+    <div class="tbl"><h3>kategori</h3><ul>
+      <li><span><span class="pk">id</span></span><em>BIGINT</em></li>
+      <li><span>nama</span><em>VARCHAR(50)</em></li>
+    </ul></div>
+
+    <div class="tbl"><h3>menu</h3><ul>
+      <li><span><span class="pk">id</span></span><em>BIGINT</em></li>
+      <li><span><span class="fk">kategori_id</span></span><em>FK → kategori</em></li>
+      <li><span>nama</span><em>VARCHAR(100)</em></li>
+      <li><span>harga_jual</span><em>DECIMAL(12,0)</em></li>
+      <li><span>foto</span><em>VARCHAR(255) NULL</em></li>
+      <li><span>aktif</span><em>BOOLEAN</em></li>
+    </ul></div>
+
+    <div class="tbl"><h3>bahan</h3><ul>
+      <li><span><span class="pk">id</span></span><em>BIGINT</em></li>
+      <li><span>nama</span><em>VARCHAR(100)</em></li>
+      <li><span>satuan</span><em>VARCHAR(20)</em></li>
+      <li><span>harga_beli_per_satuan</span><em>DECIMAL(12,2)</em></li>
+      <li><span>stok</span><em>DECIMAL(12,2)</em></li>
+      <li><span>stok_minimum</span><em>DECIMAL(12,2)</em></li>
+    </ul></div>
+
+    <div class="tbl"><h3>resep</h3><ul>
+      <li><span><span class="pk">id</span></span><em>BIGINT</em></li>
+      <li><span><span class="fk">menu_id</span></span><em>FK → menu</em></li>
+      <li><span><span class="fk">bahan_id</span></span><em>FK → bahan</em></li>
+      <li><span>takaran</span><em>DECIMAL(10,2)</em></li>
+    </ul></div>
+
+    <div class="tbl"><h3>transaksi</h3><ul>
+      <li><span><span class="pk">id</span></span><em>BIGINT</em></li>
+      <li><span>kode</span><em>VARCHAR(20) UQ</em></li>
+      <li><span><span class="fk">user_id</span></span><em>FK → users</em></li>
+      <li><span>tanggal</span><em>DATETIME</em></li>
+      <li><span>total</span><em>DECIMAL(12,0)</em></li>
+      <li><span>metode_bayar</span><em>ENUM(tunai,qris,debit)</em></li>
+    </ul></div>
+
+    <div class="tbl"><h3>detail_transaksi</h3><ul>
+      <li><span><span class="pk">id</span></span><em>BIGINT</em></li>
+      <li><span><span class="fk">transaksi_id</span></span><em>FK → transaksi</em></li>
+      <li><span><span class="fk">menu_id</span></span><em>FK → menu</em></li>
+      <li><span>qty</span><em>INT</em></li>
+      <li><span>harga_satuan</span><em>DECIMAL(12,0)</em></li>
+      <li><span>hpp_satuan</span><em>DECIMAL(12,0)</em></li>
+    </ul></div>
+
+    <div class="tbl"><h3>pergerakan_stok</h3><ul>
+      <li><span><span class="pk">id</span></span><em>BIGINT</em></li>
+      <li><span><span class="fk">bahan_id</span></span><em>FK → bahan</em></li>
+      <li><span>tipe</span><em>ENUM(masuk,keluar,penjualan,koreksi)</em></li>
+      <li><span>qty</span><em>DECIMAL(12,2)</em></li>
+      <li><span><span class="fk">transaksi_id</span></span><em>FK NULL</em></li>
+      <li><span>tanggal</span><em>DATETIME</em></li>
+    </ul></div>
+
+    <div class="tbl"><h3>kas</h3><ul>
+      <li><span><span class="pk">id</span></span><em>BIGINT</em></li>
+      <li><span><span class="fk">user_id</span></span><em>FK → users</em></li>
+      <li><span>tipe</span><em>ENUM(masuk,keluar)</em></li>
+      <li><span>kategori</span><em>VARCHAR(50)</em></li>
+      <li><span>jumlah</span><em>DECIMAL(12,0)</em></li>
+      <li><span>keterangan</span><em>TEXT NULL</em></li>
+      <li><span>tanggal</span><em>DATETIME</em></li>
+    </ul></div>
+  </div>
+
+  <h2 style="margin-top:24px">Contoh isi tabel: detail_transaksi</h2>
+  <div class="card" style="overflow-x:auto">
+    <table>
+      <thead><tr><th>id</th><th>transaksi_id</th><th>menu_id</th><th>qty</th><th>harga_satuan</th><th>hpp_satuan</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>TRX-0474</td><td>1 (Kopi Susu)</td><td>2</td><td>22.000</td><td>11.450</td></tr>
+        <tr><td>2</td><td>TRX-0474</td><td>3 (Matcha Latte)</td><td>1</td><td>26.000</td><td>14.900</td></tr>
+        <tr><td>3</td><td>TRX-0473</td><td>2 (Kopi Hitam)</td><td>1</td><td>18.000</td><td>7.200</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 style="margin-top:20px">Skema SQL (ringkas)</h2>
+  <pre class="schema">CREATE TABLE menu (
+  id           BIGINT PRIMARY KEY AUTO_INCREMENT,
+  kategori_id  BIGINT NOT NULL,
+  nama         VARCHAR(100) NOT NULL,
+  harga_jual   DECIMAL(12,0) NOT NULL,
+  aktif        BOOLEAN DEFAULT TRUE,
+  FOREIGN KEY (kategori_id) REFERENCES kategori(id)
+);
+
+CREATE TABLE resep (
+  id        BIGINT PRIMARY KEY AUTO_INCREMENT,
+  menu_id   BIGINT NOT NULL,
+  bahan_id  BIGINT NOT NULL,
+  takaran   DECIMAL(10,2) NOT NULL,
+  FOREIGN KEY (menu_id)  REFERENCES menu(id),
+  FOREIGN KEY (bahan_id) REFERENCES bahan(id)
+);</pre>
+</section>
+
+<!-- PANDUAN DESAIN -->
+<section class="screen" id="s-sistem">
+  <h1>Panduan Desain &amp; Sistem</h1>
+  <p class="lead">Acuan untuk dipindahkan ke Figma: warna, tipografi, komponen, dan alur.</p>
+  <div class="split">
+    <div class="card">
+      <h2>Palet warna</h2>
+      <div class="swatch">
+        <div><b style="background:#5a3a22">Espresso</b><span>#5A3A22 utama</span></div>
+        <div><b style="background:#8b5e3c">Caramel</b><span>#8B5E3C aksen</span></div>
+        <div><b style="background:#7a9a4b">Matcha</b><span>#7A9A4B sukses</span></div>
+        <div><b style="background:#e0a84f;color:#2b2118">Gold</b><span>#E0A84F peringatan</span></div>
+        <div><b style="background:#c0392b">Merah</b><span>#C0392B stok kritis</span></div>
+        <div><b style="background:#fbf6ef;color:#2b2118">Krem</b><span>#FBF6EF latar</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Tipografi &amp; ukuran</h2>
+      <table>
+        <tr><td>Judul halaman</td><td>26 px, tebal</td></tr>
+        <tr><td>Judul kartu</td><td>18 px, tebal</td></tr>
+        <tr><td>Isi</td><td>14 px</td></tr>
+        <tr><td>Tombol</td><td>14 px, tinggi min. 44 px (sentuh tablet)</td></tr>
+        <tr><td>Grid</td><td>12 kolom desktop, 2 kolom tablet, 1 kolom HP</td></tr>
+        <tr><td>Radius</td><td>10 (input/tombol), 14 (kartu)</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <h2>Alur kasir</h2>
+    <p class="lead" style="margin:0">Pilih kategori → sentuh menu (qty bertambah) → Bayar → stok bahan berkurang sesuai resep → transaksi masuk laporan dan dashboard.</p>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <h2>Hak akses</h2>
+    <table>
+      <thead><tr><th>Fitur</th><th>Pemilik</th><th>Accounting</th><th>Kasir</th></tr></thead>
+      <tbody>
+        <tr><td>Dashboard &amp; laporan</td><td>✓</td><td>✓</td><td>–</td></tr>
+        <tr><td>Kasir (POS)</td><td>✓</td><td>–</td><td>✓</td></tr>
+        <tr><td>Menu &amp; resep/HPP</td><td>✓</td><td>✓</td><td>–</td></tr>
+        <tr><td>Stok &amp; pembelian</td><td>✓</td><td>✓</td><td>lihat</td></tr>
+        <tr><td>Kelola pengguna</td><td>✓</td><td>–</td><td>–</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+</main>
+
+<script>
+const MENU=[
+ {id:1,nama:"Kopi Susu",kat:"kopi",harga:22000,ico:"🥛",bg:"#f1e2cf"},
+ {id:2,nama:"Kopi Hitam",kat:"kopi",harga:18000,ico:"☕",bg:"#e7dcd0"},
+ {id:3,nama:"Matcha Latte",kat:"nonkopi",harga:26000,ico:"🍵",bg:"#e3ecd2"},
+ {id:4,nama:"Cokelat",kat:"nonkopi",harga:22000,ico:"🍫",bg:"#eadbcf"},
+ {id:5,nama:"Milky",kat:"nonkopi",harga:20000,ico:"🥛",bg:"#f5f0e8"}
+];
+let cat="all", cart={};
+const rp=n=>"Rp "+n.toLocaleString("id-ID");
+
+function go(id){
+  document.querySelectorAll("section.screen").forEach(s=>s.classList.remove("on"));
+  const el=document.getElementById("s-"+id); if(el) el.classList.add("on");
+  document.querySelectorAll("nav.tabs button").forEach(b=>b.classList.toggle("on",b.dataset.s===id));
+  window.scrollTo(0,0);
+}
+document.querySelectorAll("nav.tabs button").forEach(b=>b.onclick=()=>go(b.dataset.s));
+
+function renderMenu(){
+  const g=document.getElementById("menuGrid");
+  g.innerHTML="";
+  MENU.filter(m=>cat==="all"||m.kat===cat).forEach(m=>{
+    const b=document.createElement("button");
+    b.className="item";
+    b.innerHTML=`<div class="ico" style="background:${m.bg}">${m.ico}</div><b>${m.nama}</b><small>${rp(m.harga)}</small>`;
+    b.onclick=()=>{cart[m.id]=(cart[m.id]||0)+1;renderCart();};
+    g.appendChild(b);
+  });
+}
+function renderCart(){
+  const box=document.getElementById("cartLines");
+  const ids=Object.keys(cart);
+  if(!ids.length){box.innerHTML='<p class="lead">Belum ada item.</p>';document.getElementById("cartTotal").textContent="Rp 0";return;}
+  let total=0; box.innerHTML="";
+  ids.forEach(id=>{
+    const m=MENU.find(x=>x.id==id), q=cart[id], sub=m.harga*q; total+=sub;
+    const d=document.createElement("div"); d.className="line";
+    d.innerHTML=`<span>${m.nama}<br><small style="color:var(--muted)">${rp(m.harga)}</small></span>
+      <span class="qty"><button>−</button><b>${q}</b><button>+</button></span><b>${rp(sub)}</b>`;
+    const [minus,plus]=d.querySelectorAll("button");
+    minus.onclick=()=>{cart[id]--; if(cart[id]<=0) delete cart[id]; renderCart();};
+    plus.onclick=()=>{cart[id]++; renderCart();};
+    box.appendChild(d);
+  });
+  document.getElementById("cartTotal").textContent=rp(total);
+}
+function clearCart(){cart={};renderCart();}
+function pay(){
+  if(!Object.keys(cart).length){alert("Pesanan masih kosong.");return;}
+  alert("Pembayaran tercatat (prototipe).\nStok bahan berkurang sesuai resep.");
+  clearCart();
+}
+document.querySelectorAll("#cats span").forEach(s=>s.onclick=()=>{
+  cat=s.dataset.c;
+  document.querySelectorAll("#cats span").forEach(x=>x.classList.toggle("on",x===s));
+  renderMenu();
+});
+renderMenu(); renderCart();
+</script>
+</body>
+</html>
